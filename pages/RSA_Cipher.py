@@ -49,7 +49,7 @@ def main():
     encrypted_message = st.text_area("Enter cipher text (comma-separated):")
     if st.button("Decrypt"):
         if encrypted_message:
-            ciphertext = [int(char) for char in encrypted_message.split(',')]
+            ciphertext = [int(char) for char in encrypted_message.split(',') if char.strip().isdigit()]
             if 'private_key' in locals():
                 plaintext = decrypt(ciphertext, private_key)
                 st.write("Decrypted message:", plaintext)
