@@ -1,5 +1,7 @@
 from sympy.ntheory.primetest import isprime
 from sympy.core.numbers import mod_inverse
+import streamlit as st
+from sympy import isprime, mod_inverse
 
 def generate_keypair(p, q):
     n = p * q
