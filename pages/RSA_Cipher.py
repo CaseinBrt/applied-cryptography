@@ -1,7 +1,8 @@
 import streamlit as st
 
-
 def get_session_id():
+    if 'report_id' not in st.session_state:
+        st.session_state.report_id = None
     return st.session_state.report_id
 
 def get_session():
