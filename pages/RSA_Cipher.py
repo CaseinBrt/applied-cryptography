@@ -55,8 +55,8 @@ def main():
 
     # Sidebar
     st.sidebar.title("RSA Parameters")
-    p = st.sidebar.number_input("Value of Prime number p:", value=43, min_value=2, step=1)
-    q = st.sidebar.number_input("Value of Prime number q:", value=41, min_value=2, step=1)
+    p = st.sidebar.number_input("Value of Prime number p:", value=43, min_value=2, step=1, key="p_input")
+    q = st.sidebar.number_input("Value of Prime number q:", value=41, min_value=2, step=1, key="q_input")
 
     # Generate keypair
     if st.sidebar.button("Gen new keypair"):
@@ -104,10 +104,10 @@ def main():
         st.write(''.join([chr(char) for char in encrypted_message]))
         st.write("To Decrypt, use private key", f"{private_key[0]} | n = {public_key[1]}")
         st.subheader("Key:")
-        key = st.number_input("1", value=1, step=1)
+        key = st.number_input("1", value=1, step=1, key="key_input")
         st.subheader("n:")
-        n_value = st.number_input("1", value=1, step=1)
+        n_value = st.number_input("1", value=1, step=1, key="n_input")
         st.write("Invalid: �������������")
 
 if __name__ == "__main__":
-    main()
+    main
