@@ -19,10 +19,10 @@ def gcd(a, b):
 
 def generate_keypair(p, q):
     if not is_prime(p):
-        st.write(f"p: {p} is not a prime number!")
+        st.error(f"p: {p} is not a prime number!")
         return None, None
     if not is_prime(q):
-        st.write(f"q: {q} is not a prime number!")
+        st.error(f"q: {q} is not a prime number!")
         return None, None
     
     n = p * q
