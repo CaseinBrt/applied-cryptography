@@ -41,6 +41,8 @@ def generate_keypair(p, q):
     return (e, n), (d, n)
 
 def encrypt(message, public_key):
+    if public_key is None:
+        return None
     e, n = public_key
     return [pow(ord(char), e, n) for char in message]
 
@@ -82,18 +84,19 @@ def main():
     encrypted_message = None
     if message:
         encrypted_message = encrypt(message, public_key)
-        decrypted_message = decrypt(encrypted_message, private_key)
-        st.write("Encryption")
-        st.write(f"Public key: e = {public_key[0]} | n = {public_key[1]}")
-        st.write("Deryption")
-        st.write(f"Private key: d = {private_key[0]} ^ -1 mod {public_key[1]} = {private_key[1]} | n = {public_key[1]}")
-        st.write("Message:")
-        st.write(f"message: {message}")
-        st.write(f"message: {[ord(char) for char in message]}")
-        st.write("Cipher text:")
-        st.write(encrypted_message)
-        st.write("Cipher text:")
-        st.write(''.join([chr(char) for char in encrypted_message]))
+        if encrypted_message:
+            decrypted_message = decrypt(encrypted_message, private_key)
+            st.write("Encryption")
+            st.write(f"Public key: e = {public_key[0]} | n = {public_key[1]}")
+            st.write("Deryption")
+            st.write(f"Private key: d = {private_key[0]} ^ -1 mod {public_key[1]} = {private_key[1]} | n = {public_key[1]}")
+            st.write("Message:")
+            st.write(f"message: {message}")
+            st.write(f"message: {[ord(char) for char in message]}")
+            st.write("Cipher text:")
+            st.write(encrypted_message)
+            st.write("Cipher text:")
+            st.write(''.join([chr(char) for char in encrypted_message]))
 
     # Display decryption key and invalid message
     if encrypted_message:
