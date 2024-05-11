@@ -1,5 +1,10 @@
 import streamlit as st
 
+class SessionState:
+    def __init__(self, **kwargs):
+        for key, val in kwargs.items():
+            setattr(self, key, val)
+
 def get_session_id():
     if 'report_id' not in st.session_state:
         st.session_state.report_id = None
