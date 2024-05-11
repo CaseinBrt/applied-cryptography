@@ -57,8 +57,7 @@ def main():
     q = st.sidebar.number_input("Value of Prime number q:", value=41, min_value=2, step=1)
 
     # Generate keypair
-    if st.sidebar.button("Gen new keypair"):
-        public_key, private_key = generate_keypair(p, q)
+    public_key, private_key = generate_keypair(p, q)
 
     # Display RSA parameters
     st.write("RSA Parameters")
@@ -70,7 +69,7 @@ def main():
 
     # Display message if 'p' is not prime
     if not is_prime(p):
-        st.write(f"p: {p} is not a prime number!")
+        st.error(f"p: {p} is not a prime number!")
 
     # Display keypair if generated
     if public_key is not None and private_key is not None:
