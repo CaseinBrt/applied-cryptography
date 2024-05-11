@@ -34,6 +34,11 @@ def main():
     t = (p - 1) * (q - 1)
 
     # Display RSA parameters
+    st.write("RSA Parameters")
+    st.write(f"Value of Prime number p:")
+    st.write(f"{p}                        +-(we can add and minus)")
+    st.write(f"Value of Prime number q:")
+    st.write(f"{q}                        +-(we can add and minus)")
     st.write(f"p: {p}")
     st.write(f"q: {q}")
     st.write(f"n = {p}*{q} = {n}")
@@ -42,11 +47,19 @@ def main():
     # Generate keypair
     if st.sidebar.button("Generate Key Pair"):
         public_key, private_key = generate_keypair(p, q)
-        st.sidebar.write(f"Public key: e = {public_key[0]}")
-        st.sidebar.write(f"Private key: d = {private_key[0]}")
+        st.sidebar.write(f"gcd({public_key[0]}, {t}) = 1")
+        st.sidebar.write(f"e = {public_key[0]}")
+        st.sidebar.write(f"d = {private_key[0]} = pow({public_key[0]}, -1, {t})")
 
     # Main panel
-    st.header("RSA Encryption and Decryption")
+    st.header("RSA🔒🔑")
+    st.subheader("Encryption")
+    if 'public_key' in locals():
+        st.write(f"Public key: e = {public_key[0]} | n = {public_key[1]}")
+    st.subheader("Deryption")
+    if 'private_key' in locals():
+        st.write(f"Private key: d = {private_key[0]} = pow({public_key[0]}, -1, {t}) | n = {private_key[1]}")
+
     # Rest of the code for encryption and decryption...
 
 if __name__ == "__main__":
