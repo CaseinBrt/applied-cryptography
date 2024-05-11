@@ -67,7 +67,7 @@ def main():
     # Main panel
     st.header("RSA🔒🔑")
     st.subheader("Encryption")
-    if 'public_key' in locals():
+    if public_key is not None:
         st.write(f"Public key: e = {public_key[0]} | n = {public_key[1]}")
         message = st.text_area("Enter your message for encryption:")
         if st.button("Encrypt"):
@@ -76,7 +76,7 @@ def main():
                 st.write("Cipher text:", ciphertext)
 
     st.subheader("Decryption")
-    if 'private_key' in locals():
+    if private_key is not None:
         st.write(f"Private key: d = {private_key[0]} = pow({public_key[0]}, -1, {p - 1}*{q - 1}) | n = {private_key[1]}")
         encrypted_message = st.text_area("Enter cipher text (comma-separated):")
         if st.button("Decrypt"):
