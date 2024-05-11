@@ -1,21 +1,15 @@
 import streamlit as st
 
 
-class SessionState(object):
+class SessionState:
     def __init__(self, **kwargs):
-        for key, val in kwargs.items():
-            setattr(self, key, val)
+        self.__dict__.update(kwargs)
 
-def get_session_id():
-    session_id = get_report_ctx().session_id
-    return session_id
-
-def get_session():
-    session_id = get_session_id()
-    session = Server.get_current()._get_session_info(session_id).session
-    if not hasattr(session, '_custom_session_state'):
-        session._custom_session_state = SessionState()
-    return session._custom_session_state
+def get_session_state():
+    session = st.report_thread.get_report_ctx().session
+    if not hasattr(session, '_session_state'):
+        session._session_state = SessionState()
+    return session._session_state
 
 def is_prime(num):
     if num <= 1:
