@@ -1,11 +1,30 @@
 import streamlit as st
 
+def is_prime(num):
+    if num <= 1:
+        return False
+    if num == 2:
+        return True
+    if num % 2 == 0:
+        return False
+    for i in range(3, int(num**0.5) + 1, 2):
+        if num % i == 0:
+            return False
+    return True
+
 def gcd(a, b):
     while b != 0:
         a, b = b, a % b
     return a
 
 def generate_keypair(p, q):
+    if not is_prime(p):
+        st.write(f"p: {p} is not a prime number!")
+        return None, None
+    if not is_prime(q):
+        st.write(f"q: {q} is not a prime number!")
+        return None, None
+    
     n = p * q
     t = (p - 1) * (q - 1)
     
@@ -37,27 +56,13 @@ def main():
     p = st.sidebar.number_input("Value of Prime number p:", value=43)
     q = st.sidebar.number_input("Value of Prime number q:", value=41)
 
-    # Calculate n and t
-    n = p * q
-    t = (p - 1) * (q - 1)
-
-    # Display RSA parameters
-    st.write("RSA Parameters")
-    st.write(f"Value of Prime number p:")
-    st.write(f"{p}                        +-(we can add and minus)")
-    st.write(f"Value of Prime number q:")
-    st.write(f"{q}                        +-(we can add and minus)")
-    st.write(f"p: {p}")
-    st.write(f"q: {q}")
-    st.write(f"n = {p}*{q} = {n}")
-    st.write(f"t = ({p}-1)*({q}-1) = {t}")
-
     # Generate keypair
-    if st.sidebar.button("Generate Key Pair"):
+    if st.sidebar.button("Generate New Key Pair"):
         public_key, private_key = generate_keypair(p, q)
-        st.sidebar.write(f"gcd({public_key[0]}, {t}) = 1")
-        st.sidebar.write(f"e = {public_key[0]}")
-        st.sidebar.write(f"d = {private_key[0]} = pow({public_key[0]}, -1, {t})")
+        if public_key is not None and private_key is not None:
+            st.sidebar.write(f"gcd({public_key[0]}, {p - 1}*{q - 1}) = 1")
+            st.sidebar.write(f"e = {public_key[0]}")
+            st.sidebar.write(f"d = {private_key[0]} = pow({public_key[0]}, -1, {p - 1}*{q - 1})")
 
     # Main panel
     st.header("RSA🔒🔑")
@@ -72,7 +77,7 @@ def main():
 
     st.subheader("Decryption")
     if 'private_key' in locals():
-        st.write(f"Private key: d = {private_key[0]} = pow({public_key[0]}, -1, {t}) | n = {private_key[1]}")
+        st.write(f"Private key: d = {private_key[0]} = pow({public_key[0]}, -1, {p - 1}*{q - 1}) | n = {private_key[1]}")
         encrypted_message = st.text_area("Enter cipher text (comma-separated):")
         if st.button("Decrypt"):
             if encrypted_message:
