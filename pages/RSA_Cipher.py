@@ -53,37 +53,25 @@ def main():
 
     # Sidebar
     st.sidebar.title("RSA Parameters")
-    p = st.sidebar.number_input("Value of Prime number p:", value=43)
-    q = st.sidebar.number_input("Value of Prime number q:", value=41)
+    p = st.sidebar.number_input("Value of Prime number p:", value=43, min_value=2, step=1)
+    q = st.sidebar.number_input("Value of Prime number q:", value=41, min_value=2, step=1)
 
     # Generate keypair
-    if st.sidebar.button("Generate New Key Pair"):
-        public_key, private_key = generate_keypair(p, q)
-        if public_key is not None and private_key is not None:
-            st.sidebar.write(f"gcd({public_key[0]}, {p - 1}*{q - 1}) = 1")
-            st.sidebar.write(f"e = {public_key[0]}")
-            st.sidebar.write(f"d = {private_key[0]} = pow({public_key[0]}, -1, {p - 1}*{q - 1})")
+    public_key, private_key = generate_keypair(p, q)
 
-    # Main panel
-    st.header("RSA🔒🔑")
-    st.subheader("Encryption")
-    if public_key is not None:
-        st.write(f"Public key: e = {public_key[0]} | n = {public_key[1]}")
-        message = st.text_area("Enter your message for encryption:")
-        if st.button("Encrypt"):
-            if message:
-                ciphertext = encrypt(message, public_key)
-                st.write("Cipher text:", ciphertext)
+    # Display RSA parameters
+    st.write("RSA Parameters")
+    st.write(f"p: {p}")
+    st.write(f"q: {q}")
+    if public_key is not None and private_key is not None:
+        st.write(f"n = {p}*{q} = {public_key[1]}")
+        st.write(f"t = ({p}-1)*({q}-1) = {((p-1)*(q-1))}")
 
-    st.subheader("Decryption")
-    if private_key is not None:
-        st.write(f"Private key: d = {private_key[0]} = pow({public_key[0]}, -1, {p - 1}*{q - 1}) | n = {private_key[1]}")
-        encrypted_message = st.text_area("Enter cipher text (comma-separated):")
-        if st.button("Decrypt"):
-            if encrypted_message:
-                ciphertext = [int(char) for char in encrypted_message.split(',') if char.strip().isdigit()]
-                plaintext = decrypt(ciphertext, private_key)
-                st.write("Decrypted message:", plaintext)
+    # Display keypair if generated
+    if public_key is not None and private_key is not None:
+        st.write("Gen keypair (this part is clickable)")
+        st.write(f"e = {public_key[0]}")
+        st.write(f"d = {private_key[0]} = pow({public_key[0]}, -1, {(p - 1)*(q - 1)})")
 
 if __name__ == "__main__":
     main()
