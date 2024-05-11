@@ -110,4 +110,4 @@ def main():
         st.write("Invalid: �������������")
 
 if __name__ == "__main__":
-    main
+    main()
