@@ -21,6 +21,14 @@ def generate_keypair(p, q):
     
     return (e, n), (d, n)
 
+def encrypt(message, public_key):
+    e, n = public_key
+    return [pow(ord(char), e, n) for char in message]
+
+def decrypt(ciphertext, private_key):
+    d, n = private_key
+    return ''.join([chr(pow(char, d, n)) for char in ciphertext])
+
 def main():
     st.title("RSA Encryption and Decryption")
 
@@ -56,11 +64,21 @@ def main():
     st.subheader("Encryption")
     if 'public_key' in locals():
         st.write(f"Public key: e = {public_key[0]} | n = {public_key[1]}")
-    st.subheader("Deryption")
+        message = st.text_area("Enter your message for encryption:")
+        if st.button("Encrypt"):
+            if message:
+                ciphertext = encrypt(message, public_key)
+                st.write("Cipher text:", ciphertext)
+
+    st.subheader("Decryption")
     if 'private_key' in locals():
         st.write(f"Private key: d = {private_key[0]} = pow({public_key[0]}, -1, {t}) | n = {private_key[1]}")
-
-    # Rest of the code for encryption and decryption...
+        encrypted_message = st.text_area("Enter cipher text (comma-separated):")
+        if st.button("Decrypt"):
+            if encrypted_message:
+                ciphertext = [int(char) for char in encrypted_message.split(',') if char.strip().isdigit()]
+                plaintext = decrypt(ciphertext, private_key)
+                st.write("Decrypted message:", plaintext)
 
 if __name__ == "__main__":
     main()
