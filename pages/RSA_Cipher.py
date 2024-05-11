@@ -1,4 +1,22 @@
 import streamlit as st
+from streamlit.report_thread import get_report_ctx
+from streamlit.server.server import Server
+
+class SessionState(object):
+    def __init__(self, **kwargs):
+        for key, val in kwargs.items():
+            setattr(self, key, val)
+
+def get_session_id():
+    session_id = get_report_ctx().session_id
+    return session_id
+
+def get_session():
+    session_id = get_session_id()
+    session = Server.get_current()._get_session_info(session_id).session
+    if not hasattr(session, '_custom_session_state'):
+        session._custom_session_state = SessionState()
+    return session._custom_session_state
 
 def is_prime(num):
     if num <= 1:
@@ -47,10 +65,14 @@ def encrypt(message, public_key):
     return [pow(ord(char), e, n) for char in message]
 
 def decrypt(ciphertext, private_key):
+    if private_key is None:
+        return None
     d, n = private_key
     return ''.join([chr(pow(char, d, n)) for char in ciphertext])
 
 def main():
+    state = get_session()
+    
     st.title("RSA Encryption and Decryption")
 
     # Sidebar
@@ -61,8 +83,11 @@ def main():
     # Generate keypair
     if st.sidebar.button("Gen new keypair"):
         public_key, private_key = generate_keypair(p, q)
+        state.public_key = public_key
+        state.private_key = private_key
     else:
-        public_key, private_key = None, None
+        public_key = state.public_key if hasattr(state, 'public_key') else None
+        private_key = state.private_key if hasattr(state, 'private_key') else None
 
     # Display RSA parameters
     st.write("RSA Parameters")
@@ -98,7 +123,7 @@ def main():
             st.write("Cipher text:")
             st.write(''.join([chr(char) for char in encrypted_message]))
 
-    # Display decryption key and invalid message
+    # Display decryption key and result
     if encrypted_message:
         st.subheader("Cipher text:")
         st.write(''.join([chr(char) for char in encrypted_message]))
@@ -107,7 +132,15 @@ def main():
         key = st.number_input("1", value=1, step=1, key="key_input")
         st.subheader("n:")
         n_value = st.number_input("1", value=1, step=1, key="n_input")
-        st.write("Invalid: �������������")
+
+        # Decrypt the message
+        decrypted_message = decrypt(encrypted_message, private_key)
+
+        # Determine the invalid message based on decryption result
+        if decrypted_message is None:
+            st.write("Invalid: �������������")
+        else:
+            st.write("Decrypted message:", decrypted_message)
 
 if __name__ == "__main__":
     main()
