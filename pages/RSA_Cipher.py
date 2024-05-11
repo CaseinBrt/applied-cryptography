@@ -56,13 +56,11 @@ def main():
     p = st.sidebar.number_input("Value of Prime number p:", value=43, min_value=2, step=1)
     q = st.sidebar.number_input("Value of Prime number q:", value=41, min_value=2, step=1)
 
-    # Display p and q values
-    st.sidebar.write(f"p: {p} {'is not' if not is_prime(p) else ''} a prime number!")
-    st.sidebar.write(f"q: {q} {'is not' if not is_prime(q) else ''} a prime number!")
-
     # Generate keypair
     if st.sidebar.button("Gen new keypair"):
         public_key, private_key = generate_keypair(p, q)
+    else:
+        public_key, private_key = None, None
 
     # Display RSA parameters
     st.write("RSA Parameters")
@@ -73,6 +71,10 @@ def main():
         st.write(f"t = ({p}-1)*({q}-1) = {((p-1)*(q-1))}")
         st.write("e =", public_key[0])
         st.write("d =", private_key[0], f"= pow({public_key[0]}, -1, {(p - 1)*(q - 1)})")
+
+    # Display message if 'p' is not prime
+    if not is_prime(p):
+        st.error(f"p: {p} is not a prime number!")
 
     # Encryption and Decryption
     st.subheader("RSA🔒🔑")
