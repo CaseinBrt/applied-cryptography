@@ -5,3 +5,5 @@ pydeck
 streamlit
 pycryptodome
 sympy
+thread
+server
