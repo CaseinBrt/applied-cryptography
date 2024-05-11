@@ -56,8 +56,13 @@ def main():
     p = st.sidebar.number_input("Value of Prime number p:", value=43, min_value=2, step=1)
     q = st.sidebar.number_input("Value of Prime number q:", value=41, min_value=2, step=1)
 
+    # Display p and q values
+    st.sidebar.write(f"p: {p} {'is not' if not is_prime(p) else ''} a prime number!")
+    st.sidebar.write(f"q: {q} {'is not' if not is_prime(q) else ''} a prime number!")
+
     # Generate keypair
-    public_key, private_key = generate_keypair(p, q)
+    if st.sidebar.button("Gen new keypair"):
+        public_key, private_key = generate_keypair(p, q)
 
     # Display RSA parameters
     st.write("RSA Parameters")
@@ -66,15 +71,37 @@ def main():
     if public_key is not None and private_key is not None:
         st.write(f"n = {p}*{q} = {public_key[1]}")
         st.write(f"t = ({p}-1)*({q}-1) = {((p-1)*(q-1))}")
-
-    # Display message if 'p' is not prime
-    if not is_prime(p):
-        st.error(f"p: {p} is not a prime number!")
-
-    # Display keypair if generated
-    if public_key is not None and private_key is not None:
         st.write("e =", public_key[0])
         st.write("d =", private_key[0], f"= pow({public_key[0]}, -1, {(p - 1)*(q - 1)})")
+
+    # Encryption and Decryption
+    st.subheader("RSA🔒🔑")
+    message = st.text_input("Message:")
+    if message:
+        encrypted_message = encrypt(message, public_key)
+        decrypted_message = decrypt(encrypted_message, private_key)
+        st.write("Encryption")
+        st.write(f"Public key: e = {public_key[0]} | n = {public_key[1]}")
+        st.write("Deryption")
+        st.write(f"Private key: d = {private_key[0]} ^ -1 mod {public_key[1]} = {private_key[1]} | n = {public_key[1]}")
+        st.write("Message:")
+        st.write(f"message: {message}")
+        st.write(f"message: {[ord(char) for char in message]}")
+        st.write("Cipher text:")
+        st.write(encrypted_message)
+        st.write("Cipher text:")
+        st.write(''.join([chr(char) for char in encrypted_message]))
+
+    # Display decryption key and invalid message
+    if encrypted_message:
+        st.subheader("Cipher text:")
+        st.write(''.join([chr(char) for char in encrypted_message]))
+        st.write("To Decrypt, use private key", f"{private_key[0]} | n = {public_key[1]}")
+        st.write("Key:")
+        st.write("1", "+- (we can add and minus)")
+        st.write("n:")
+        st.write("1", "+- (we can add and minus)")
+        st.write("Invalid: �������������")
 
 if __name__ == "__main__":
     main()
