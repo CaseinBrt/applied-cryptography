@@ -103,10 +103,10 @@ def main():
         st.subheader("Cipher text:")
         st.write(''.join([chr(char) for char in encrypted_message]))
         st.write("To Decrypt, use private key", f"{private_key[0]} | n = {public_key[1]}")
-        st.write("Key:")
-        st.write("1", "+- (we can add and minus)")
-        st.write("n:")
-        st.write("1", "+- (we can add and minus)")
+        st.subheader("Key:")
+        key = st.number_input("1", value=1, step=1)
+        st.subheader("n:")
+        n_value = st.number_input("1", value=1, step=1)
         st.write("Invalid: �������������")
 
 if __name__ == "__main__":
