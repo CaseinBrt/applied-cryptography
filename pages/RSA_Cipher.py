@@ -57,8 +57,7 @@ def main():
     q = st.sidebar.number_input("Value of Prime number q:", value=41, min_value=2, step=1)
 
     # Generate keypair
-    if st.sidebar.button("Gen keypair"):
-        public_key, private_key = generate_keypair(p, q)
+    public_key, private_key = generate_keypair(p, q)
 
     # Display RSA parameters
     st.write("RSA Parameters")
